@@ -1,0 +1,51 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+def triangular_wave(Omega, num_terms, amplitude, phase, t):
+    wave = np.zeros_like(t)
+    for n in range(1, num_terms + 1):
+        # Solo usamos términos impares (2n-1)
+        n_term = 2 * n - 1
+        # Suma de la serie de Fourier
+        wave += ((-1)**(n+1)) * (amplitude / (n_term**2)) * np.sin(n_term * Omega * t + phase)
+    wave *= (8 / np.pi**2)  # Normalización de la serie de Fourier
+    return wave
+
+# Parámetros de las ondas triangulares
+Omega1 = 5 * np.pi  # Frecuencia angular de la primera onda
+Omega2 = 4 * np.pi  # Frecuencia angular de la segunda onda
+num_terms = 10  # Número de términos de la serie
+amplitude1 = 1  # Amplitud de la primera onda
+amplitude2 = 1  # Amplitud de la segunda onda
+phase1 = 0  # Fase de la primera onda
+phase2 = np.pi  # Fase de la segunda onda
+t = np.linspace(0, 2 * np.pi, 1000)  # Intervalo de tiempo
+
+# Generar las ondas triangulares
+tri_wave1 = triangular_wave(Omega1, num_terms, amplitude1, phase1, t)
+tri_wave2 = triangular_wave(Omega2, num_terms, amplitude2, phase2, t)
+
+# Graficar las ondas triangulares y la figura de Lissajous
+plt.figure(figsize=(12, 5))
+
+# Figura de Lissajous
+plt.subplot(1, 2, 1)
+plt.plot(tri_wave1, tri_wave2, label='Figura de Lissajous')
+plt.title('Figura de Lissajous con Ondas Triangulares')
+plt.xlabel('Onda Triangular 1')
+plt.ylabel('Onda Triangular 2')
+plt.grid(True)
+#plt.legend()
+
+# Ondas triangulares individuales
+plt.subplot(1, 2, 2)
+plt.plot(t, tri_wave1, label='Onda Triangular 1')
+plt.plot(t, tri_wave2, label='Onda Triangular 2', linestyle='--')
+plt.title('Ondas Triangulares')
+plt.xlabel('Tiempo')
+plt.ylabel('Amplitud')
+plt.grid(True)
+plt.legend()
+
+plt.tight_layout()
+plt.show()
